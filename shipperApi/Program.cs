@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using shipperApi.Models.DataBase;
 using Microsoft.AspNetCore.Mvc;
 using shipperApi.Endpoints;
+using shipperApi.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,13 @@ builder.Services.AddDbContext<ShippingDevContex>(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers().AddXmlSerializerFormatters();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+   
+    //options.SchemaFilter<XmlSchemaFilter>();
+    options.CustomSchemaIds(type => type.FullName);
+});
+builder.Services.AddScoped<IReportGeneratorService, FastReportGeneratorService>();
 
 var app = builder.Build();
 
@@ -30,6 +38,8 @@ app.UseHttpsRedirection();
 
 
 app.MapShippingSessionLoginEndpoint();
+app.MapCreateExpeditionEndpoint();
+
 
 app.Run();
 

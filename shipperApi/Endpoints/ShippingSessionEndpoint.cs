@@ -1,5 +1,3 @@
-// Ficheiro: Endpoints/ShippingSessionLoginEndpoint.cs
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,9 +16,9 @@ public static class ShippingSessionLoginEndpoint
 {
     public static IEndpointRouteBuilder MapShippingSessionLoginEndpoint(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/services");
+        var group = app.MapGroup("/services/ShippingServices");
 
-        group.MapPost("/ShippingServices", async (HttpRequest request, [FromServices] ShippingDevContex db) =>
+        group.MapPost("/ShippingSessionLogin", async (HttpRequest request, [FromServices] ShippingDevContex db) =>
         {
             SoapEnvelope? envelope;
             ShippingSessionLogin? loginRequest;

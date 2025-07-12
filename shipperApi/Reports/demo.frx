@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="2025-07-12" ReportInfo.Modified="2025-07-12" ReportInfo.CreatorVersion="1.0.0.0">
+  <ReportPage Name="Page1" PaperSize="A4" Landscape="false">
+    <ReportTitleBand Name="ReportTitle1" Width="793.7" Height="113.4">
+      <TextObject Name="Text1" Left="9.45" Top="9.45" Width="774.8" Height="94.5" 
+                  Text="Hello World from FastReport .NET on Linux!" 
+                  HorzAlign="Center" VertAlign="Center" 
+                  Font="Arial, 24pt, style=Bold"/>
+    </ReportTitleBand>
+  </ReportPage>
+</Report>

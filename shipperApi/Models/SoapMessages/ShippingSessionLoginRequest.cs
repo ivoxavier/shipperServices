@@ -13,11 +13,13 @@ public class SoapEnvelope
 
 public class SoapBody
 {
-    //[XmlElement("ShippingLoginSession", Namespace = "http://www.talend.org/service/")]
-    [XmlAnyElement]
-    public XmlElement? Any { get; set; }
 
-    public SoapBody() {}
+     [XmlAnyElement]
+    public XmlElement? Any { get; set; }
+    
+    //[XmlElement("ShippingSessionLogin", Namespace = "http://www.talend.org/service/")]
+    //public ShippingSessionLogin Login { get; set; }
+    public SoapBody() { }
 }
 
 
