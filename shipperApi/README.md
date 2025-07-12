@@ -28,3 +28,6 @@ dotnet new sln --name shipperApi
 dotnet publish shipApi.csproj -c Release -r linux-x64 --self-contained true
 
 sudo apt-get update && sudo apt-get install -y libgdiplus
+
+
+dotnet add package FastReport.Data.MsSql
