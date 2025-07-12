@@ -132,3 +132,4 @@
 /home/ivo-xavier/Documentos/GitHub/shipperServices/shipperApi/obj/Debug/net8.0/shipperApi.pdb
 /home/ivo-xavier/Documentos/GitHub/shipperServices/shipperApi/obj/Debug/net8.0/shipperApi.genruntimeconfig.cache
 /home/ivo-xavier/Documentos/GitHub/shipperServices/shipperApi/obj/Debug/net8.0/ref/shipperApi.dll
+/home/ivo-xavier/Documentos/GitHub/shipperServices/shipperApi/obj/Debug/net8.0/shipperApi.sourcelink.json

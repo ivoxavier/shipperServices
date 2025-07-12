@@ -32,7 +32,9 @@ public static class ShippingSessionLoginEndpoint
                 using (var streamReader = new StreamReader(request.Body))
                 {
                     requestBody = await streamReader.ReadToEndAsync();
-                }
+                }   
+
+                Console.WriteLine(requestBody);
 
     
                 var envelopeSerializer = new XmlSerializer(typeof(SoapEnvelope));
@@ -62,10 +64,8 @@ public static class ShippingSessionLoginEndpoint
                 
                 return Results.BadRequest($"Erro during processing XML: {ex.Message}");
             }
-           
 
 
-    
             if (!MiniValidator.TryValidate(loginRequest, out var errors))
             {
                 return Results.ValidationProblem(errors);
