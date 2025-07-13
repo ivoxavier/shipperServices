@@ -181,7 +181,7 @@ public static class CreateExpeditionEndpoint
         .Produces<string>(StatusCodes.Status400BadRequest)
         .ProducesValidationProblem()
         .Produces(StatusCodes.Status500InternalServerError)
-        .WithTags("Shipping Session");
+        .WithTags("Create Expedition");
 
         return app;
     }
