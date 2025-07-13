@@ -39,6 +39,7 @@ app.UseHttpsRedirection();
 
 app.MapShippingSessionLoginEndpoint();
 app.MapCreateExpeditionEndpoint();
+app.MapCreateManifestEndpoint();
 
 
 app.Run();

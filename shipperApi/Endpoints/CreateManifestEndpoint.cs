@@ -13,16 +13,16 @@ using shipperApi.Services;
 
 namespace shipperApi.Endpoints;
 
-public static class CreateExpeditionEndpoint
+public static class CreateManifestEndpoint
 {
-    public static IEndpointRouteBuilder MapCreateExpeditionEndpoint(this IEndpointRouteBuilder app)
+    public static IEndpointRouteBuilder MapCreateManifestEndpoint(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/services/ShippingServices");
 
-        group.MapPost("/CreateExpeditionRequest", async (HttpRequest request, [FromServices] ShippingDevContex db,[FromServices] IReportGeneratorService reportService) =>
+        group.MapPost("/CreateManifest", async (HttpRequest request, [FromServices] ShippingDevContex db,[FromServices] IReportGeneratorService reportService) =>
         {
-            SoapExpeditionEnvelope? envelope;
-            CreateExpeditionRequest? expeditionRequest;
+            SoapManifestEnvelope? envelope;
+            CreateManifestRequest? manifestRequest;
 
             
             try
@@ -36,10 +36,10 @@ public static class CreateExpeditionEndpoint
                 Console.WriteLine(requestBody);
 
     
-                var envelopeSerializer = new XmlSerializer(typeof(SoapExpeditionEnvelope));
+                var envelopeSerializer = new XmlSerializer(typeof(SoapManifestEnvelope));
                 using (var stringReader = new StringReader(requestBody))
                 {
-                    envelope = envelopeSerializer.Deserialize(stringReader) as SoapExpeditionEnvelope;
+                    envelope = envelopeSerializer.Deserialize(stringReader) as SoapManifestEnvelope;
                 }
 
                 if (envelope?.Body?.Any == null)
@@ -47,13 +47,13 @@ public static class CreateExpeditionEndpoint
                     return Results.BadRequest("Body is invalid or body is empty");
                 }
 
-                var contentSerializer = new XmlSerializer(typeof(CreateExpeditionRequest), new XmlRootAttribute("CreateExpeditionRequest") { Namespace = "http://www.talend.org/service/" });
+                var contentSerializer = new XmlSerializer(typeof(CreateManifestRequest), new XmlRootAttribute("CreateManifest") { Namespace = "http://www.talend.org/service/" });
                 using (var nodeReader = new XmlNodeReader(envelope.Body.Any))
                 {
-                    expeditionRequest = contentSerializer.Deserialize(nodeReader) as CreateExpeditionRequest;
+                    manifestRequest = contentSerializer.Deserialize(nodeReader) as CreateManifestRequest;
                 }
 
-                if (expeditionRequest == null)
+                if (manifestRequest == null)
                 {
                     return Results.BadRequest("Elements invalid inside Body");
                 }
@@ -65,21 +65,20 @@ public static class CreateExpeditionEndpoint
             }
 
 
-            if (!MiniValidator.TryValidate(expeditionRequest, out var errors))
+            if (!MiniValidator.TryValidate(manifestRequest, out var errors))
             {
                 return Results.ValidationProblem(errors);
             }
 
-            //var account = expeditionRequest.Account;
-            //var user = expeditionRequest.User;
-            //var password = expeditionRequest.Password;
+            //var account = manifestRequest.Account;
+            //var user = manifestRequest.User;
+            //var password = manifestRequest.Password;
 
             var connection = db.Database.GetDbConnection();
 
             try
             {
                 await connection.OpenAsync();
-                
 
                  await using (var cmdLogin = connection.CreateCommand())
                 {       
@@ -102,6 +101,7 @@ public static class CreateExpeditionEndpoint
                         return Results.BadRequest("Codigo errado");
                     }
                 }
+
 
 
                 await using (var cmdLogin = connection.CreateCommand())
@@ -135,7 +135,7 @@ public static class CreateExpeditionEndpoint
                         try
                         {
 
-                            byte[] pdfBytes = await reportService.GeneratePdfAsync(reportFileName, expeditionRequest);
+                            byte[] pdfBytes = await reportService.GeneratePdfAsync(reportFileName, manifestRequest);
                             labelBase64 = Convert.ToBase64String(pdfBytes);
                         }
                         catch (Exception reportEx)
@@ -149,18 +149,19 @@ public static class CreateExpeditionEndpoint
                     //    return Results.BadRequest(Convert.ToString(o_sessionMessage.Value) ?? "Utilizador inexistente ou credenciais inválidas.");
                     // }
 
-                    var expeditionresponseEnvelope = new SoapExpeditionResponseEnvelope
+                    var manifestresponseEnvelope = new SoapManifestResponseEnvelope
                     {
-                        ResponseBody = new SoapExpeditionResponseBody
+                        ResponseBody = new SoapManifestResponseBody
                         {
-                            CreateExpeditionResponse = new CreateExpeditionResponse
+                            CreateManifestResponse = new CreateManifestResponse
                             {
-                                PerrorCode = "wef", //Convert.ToString(o_fastReportPath),
+                                PerrorCode = "weuyuygf", //Convert.ToString(o_fastReportPath),
                                 LabelB64 = Convert.ToString(labelBase64)
                             }
                         }
                     };
-                    return Results.Ok(expeditionresponseEnvelope);
+                    //return Results.Ok(manifestresponseEnvelope);
+                    return shipperApi.ToXML.XmlResults.Send(manifestresponseEnvelope);
                 }
             }
             catch (Exception ex)
@@ -176,12 +177,12 @@ public static class CreateExpeditionEndpoint
                 }
             }
         })
-        .Accepts<SoapExpeditionEnvelope>("application/xml")
-        .Produces<SoapExpeditionResponseEnvelope>(StatusCodes.Status200OK, "application/xml")
+        .Accepts<SoapManifestEnvelope>("application/xml")
+        .Produces<SoapManifestResponseEnvelope>(StatusCodes.Status200OK, "application/xml")
         .Produces<string>(StatusCodes.Status400BadRequest)
         .ProducesValidationProblem()
         .Produces(StatusCodes.Status500InternalServerError)
-        .WithTags("Shipping Session");
+        .WithTags("Create Manifest");
 
         return app;
     }

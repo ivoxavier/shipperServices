@@ -2,7 +2,7 @@ using System.Xml.Serialization;
 
 namespace shipperApi.Models;
 
-// --- MODELOS PARA A RESPOSTA (OUTPUT) ---
+
 
 [XmlRoot("Envelope", Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
 public class SoapExpeditionResponseEnvelope
